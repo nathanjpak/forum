@@ -10,7 +10,7 @@ submit.addEventListener("click", function() {
     postCount++;
 
     const post = document.createElement("div");
-    post.classList.add("row");  
+    post.classList.add("row", "panel");  
     
     const content = document.createElement("div");
     content.classList.add("col-sm-11");
