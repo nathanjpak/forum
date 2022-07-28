@@ -3,8 +3,12 @@ const posts = document.getElementsByClassName("posts")[0];
 const name = document.getElementById("name");
 const message = document.getElementById("message");
 const submit = document.getElementById("submit");
+let postCount = 0;
+
 
 submit.addEventListener("click", function() {
+    postCount++;
+
     const post = document.createElement("div");
     post.classList.add("row");  
     
@@ -26,21 +30,52 @@ submit.addEventListener("click", function() {
     downvote.classList.add("btn", "btn-info");
     
     let upvotes = 0;
-    const score = document.createElement("p");
-    score.textContent = upvotes;
-    score.style.marginTop = "10px";
-    buttons.append(upvote, score, downvote); 
+    const upvoteP = document.createElement("p");
+    upvoteP.textContent = upvotes;
+    upvoteP.style.marginTop = "10px";
+    buttons.append(upvote, upvoteP, downvote); 
 
     //button functionality
     upvote.addEventListener("click", function() {
         upvotes++;
-        score.textContent = upvotes;
+        upvoteP.textContent = upvotes;
+        post.upvotes = upvotes;
+        orderPosts();
     });
     downvote.addEventListener("click", function() {
         upvotes--;
-        score.textContent = upvotes;
+        upvoteP.textContent = upvotes;
+        post.upvotes = upvotes;
+        orderPosts();
     });
 
+    post.upvotes = upvotes;
+    post.id = postCount;
     post.append(buttons, content);
     posts.appendChild(post);
+    orderPosts();
 });
+
+var orderPosts = function () {
+    let postsList = posts.children;
+    const arrayControl = Array.from(postsList);
+    const arraySorted = Array.from(postsList);
+    arraySorted.sort((a,b) => b.upvotes - a.upvotes);
+    
+    //check if the order should change
+    const isDifferent = arrayControl.some(function (e, i) {
+        return e.id !== arraySorted[i].id;
+    });
+
+    if (isDifferent) {
+        //clear posts first
+        while (posts.lastChild) {
+            posts.removeChild(posts.lastChild);
+        };
+
+        //re-populate posts
+        arraySorted.forEach(function(e) {
+            posts.append(e);
+        });
+    }
+};
