@@ -49,45 +49,34 @@ submit.addEventListener("click", function() {
 
     buttonsRight.append(deleteBtn, editBtn);
 
-    //button functionality
+    //button event listeners
     upvote.addEventListener("click", function() {
         upvotes++;
         upvoteP.textContent = upvotes;
         post.upvotes = upvotes;
         orderPosts();
     });
+    
     downvote.addEventListener("click", function() {
         upvotes--;
         upvoteP.textContent = upvotes;
         post.upvotes = upvotes;
         orderPosts();
     });
+
     deleteBtn.addEventListener("click", function() {
         posts.removeChild(post);
     });
-    editBtn.addEventListener("click", function() {
-        const formGroup = document.createElement("div");
-        formGroup.classList.add("form-group");
-        const editTextArea = document.createElement("textarea");
-        editTextArea.classList.add("form-control");
-        editTextArea.type = "text";
-        editTextArea.textContent = contentText.textContent;
-        formGroup.append(editTextArea);
 
+    editBtn.addEventListener("click", function(e) {
         //check if the text has been switched to form
         if (content.children[0].classList[0] === "form-group") {
-            //if so, switch back
-            contentText.textContent = editTextArea.value;
-            content.replaceChild(contentText, content.children[0]);
-            editBtn.classList.remove("btn-warning");
-            editBtn.classList.add("btn-default");
+            renderEdit(content, contentText, e.target);   
         } else {
             //if not, replace text with form
-            content.replaceChild(formGroup, content.children[0]);
-            editBtn.classList.remove("btn-default");
-            editBtn.classList.add("btn-warning");
+            editText(content, contentText, e.target);
         }
-    })
+    });
 
     post.upvotes = upvotes;
     post.id = postCount;
@@ -119,3 +108,24 @@ var orderPosts = function () {
         });
     }
 };
+
+var renderEdit = function(content, contentText, editBtn) {
+    const editTextArea = content.firstChild.firstChild;
+    contentText.textContent = editTextArea.value;
+    content.replaceChild(contentText, content.children[0]);
+    editBtn.classList.remove("btn-warning");
+    editBtn.classList.add("btn-default");
+}
+
+var editText = function(content, contentText, editBtn) {
+    const formGroup = document.createElement("div");
+    formGroup.classList.add("form-group");
+    const editTextArea = document.createElement("textarea");
+    editTextArea.classList.add("form-control");
+    editTextArea.type = "text";
+    editTextArea.textContent = contentText.textContent;
+    formGroup.append(editTextArea);
+    content.replaceChild(formGroup, content.children[0]);
+    editBtn.classList.remove("btn-default");
+    editBtn.classList.add("btn-warning");
+}
