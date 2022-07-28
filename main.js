@@ -73,15 +73,19 @@ submit.addEventListener("click", function() {
         editTextArea.type = "text";
         editTextArea.textContent = contentText.textContent;
         formGroup.append(editTextArea);
-        
+
         //check if the text has been switched to form
         if (content.children[0].classList[0] === "form-group") {
             //if so, switch back
             contentText.textContent = editTextArea.value;
             content.replaceChild(contentText, content.children[0]);
+            editBtn.classList.remove("btn-warning");
+            editBtn.classList.add("btn-default");
         } else {
             //if not, replace text with form
             content.replaceChild(formGroup, content.children[0]);
+            editBtn.classList.remove("btn-default");
+            editBtn.classList.add("btn-warning");
         }
     })
 
