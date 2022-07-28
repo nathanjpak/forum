@@ -66,7 +66,6 @@ submit.addEventListener("click", function() {
         posts.removeChild(post);
     });
     editBtn.addEventListener("click", function() {
-        //replace with form
         const formGroup = document.createElement("div");
         formGroup.classList.add("form-group");
         const editTextArea = document.createElement("textarea");
@@ -74,15 +73,16 @@ submit.addEventListener("click", function() {
         editTextArea.type = "text";
         editTextArea.textContent = contentText.textContent;
         formGroup.append(editTextArea);
-        content.replaceChild(formGroup, contentText);
-
-        //finish editing by pressing enter
-        editTextArea.addEventListener("keydown", function(e) {
-            if (e.keyCode === 13) {
-                contentText.textContent = editTextArea.value;
-                content.replaceChild(contentText, formGroup);
-            }
-        })
+        
+        //check if the text has been switched to form
+        if (content.children[0].classList[0] === "form-group") {
+            //if so, switch back
+            contentText.textContent = editTextArea.value;
+            content.replaceChild(contentText, content.children[0]);
+        } else {
+            //if not, replace text with form
+            content.replaceChild(formGroup, content.children[0]);
+        }
     })
 
     post.upvotes = upvotes;
