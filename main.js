@@ -13,15 +13,15 @@ submit.addEventListener("click", function() {
     post.classList.add("row", "panel");  
     
     const content = document.createElement("div");
-    content.classList.add("col-sm-11");
+    content.classList.add("col-sm-10");
 
     const author = document.createElement("p");
     author.innerHTML = `Posted by: <strong>${name.value}</strong>`;
     content.append(message.value, author);    
 
     //add upvote and downvote buttons
-    const buttons = document.createElement("div");
-    buttons.classList.add("col-sm-1", "text-center"); 
+    const buttonsLeft = document.createElement("div");
+    buttonsLeft.classList.add("col-sm-1", "text-center"); 
     const upvote = document.createElement("button");
     upvote.innerHTML = '<i class="fa fa-angle-up"></i>';
     upvote.classList.add("btn", "btn-info");
@@ -33,7 +33,19 @@ submit.addEventListener("click", function() {
     const upvoteP = document.createElement("p");
     upvoteP.textContent = upvotes;
     upvoteP.style.marginTop = "10px";
-    buttons.append(upvote, upvoteP, downvote); 
+    buttonsLeft.append(upvote, upvoteP, downvote); 
+
+    //add delete and edit(?) buttons
+    const buttonsRight = document.createElement("div");
+    buttonsRight.classList.add("d-flex", "flex-column", "justify-content-evenly");
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = '<i class="fa fa-trash"></i>';
+    deleteBtn.classList.add("btn", "btn-danger"); 
+    const editBtn = document.createElement("button");
+    editBtn.innerHTML = '<i class="fa fa-pencil"></i>';
+    editBtn.classList.add("btn", "btn-default");
+
+    buttonsRight.append(deleteBtn, editBtn);
 
     //button functionality
     upvote.addEventListener("click", function() {
@@ -48,10 +60,13 @@ submit.addEventListener("click", function() {
         post.upvotes = upvotes;
         orderPosts();
     });
+    deleteBtn.addEventListener("click", function() {
+        posts.removeChild(post);
+    });
 
     post.upvotes = upvotes;
     post.id = postCount;
-    post.append(buttons, content);
+    post.append(buttonsLeft, content, buttonsRight);
     posts.appendChild(post);
     orderPosts();
 });
