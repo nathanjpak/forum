@@ -15,9 +15,11 @@ submit.addEventListener("click", function() {
     const content = document.createElement("div");
     content.classList.add("col-sm-10");
 
+    const contentText = document.createElement("p");
+    contentText.innerHTML = message.value;
     const author = document.createElement("p");
     author.innerHTML = `Posted by: <strong>${name.value}</strong>`;
-    content.append(message.value, author);    
+    content.append(contentText, author);    
 
     //add upvote and downvote buttons
     const buttonsLeft = document.createElement("div");
@@ -63,6 +65,25 @@ submit.addEventListener("click", function() {
     deleteBtn.addEventListener("click", function() {
         posts.removeChild(post);
     });
+    editBtn.addEventListener("click", function() {
+        //replace with form
+        const formGroup = document.createElement("div");
+        formGroup.classList.add("form-group");
+        const editTextArea = document.createElement("textarea");
+        editTextArea.classList.add("form-control");
+        editTextArea.type = "text";
+        editTextArea.textContent = contentText.textContent;
+        formGroup.append(editTextArea);
+        content.replaceChild(formGroup, contentText);
+
+        //finish editing by pressing enter
+        editTextArea.addEventListener("keydown", function(e) {
+            if (e.keyCode === 13) {
+                contentText.textContent = editTextArea.value;
+                content.replaceChild(contentText, formGroup);
+            }
+        })
+    })
 
     post.upvotes = upvotes;
     post.id = postCount;
